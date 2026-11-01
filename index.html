@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./github.svg?v=2" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="./github.svg?v=2" />
+    <link rel="icon" href="./github.svg?v=2" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./github.svg?v=2" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+
+    <title>Github Search</title>
+  </head>
+  <body
+    class="min-h-screen bg-neutral-900 font-sans leading-normal text-neutral-100"
+  >
+    <main class="mx-auto flex max-w-4xl flex-col gap-8 px-5 py-12">
+      <header class="flex flex-col items-center gap-4 text-center">
+        <span
+          class="rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-1 text-sm font-semibold text-amber-400"
+        >
+          <i class="fa-brands fa-github mr-2"></i>Free and no sign-up
+        </span>
+        <h1 class="text-4xl font-extrabold sm:text-5xl">
+          GitHub <span class="text-amber-400">Profile</span> Finder
+        </h1>
+        <p class="max-w-xl text-neutral-400">
+          Search any GitHub user to see their profile, their numbers, and their
+          latest repositories in seconds.
+        </p>
+      </header>
+
+      <form id="search-form" class="flex flex-col gap-3 sm:flex-row">
+        <div class="relative flex-1">
+          <i
+            class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500"
+          ></i>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Enter a GitHub username..."
+            autocomplete="off"
+            class="w-full rounded-xl border-2 border-neutral-700 bg-neutral-800 py-3.5 pl-11 pr-4 text-neutral-100 outline-none transition placeholder:text-neutral-500 focus:border-amber-400"
+          />
+        </div>
+        <button
+          type="submit"
+          class="cursor-pointer rounded-xl bg-amber-400 px-8 py-3.5 font-bold text-neutral-900 transition hover:bg-amber-300 disabled:cursor-wait disabled:opacity-60"
+        >
+          Search
+        </button>
+      </form>
+
+      <div
+        id="suggestions"
+        class="flex flex-wrap items-center justify-center gap-2 text-neutral-400 sm:justify-start"
+      >
+        <span>Try:</span>
+        <button
+          type="button"
+          data-user="bodasayed1"
+          class="chip cursor-pointer rounded-full border border-neutral-700 px-4 py-1.5 text-sm text-amber-400 transition hover:border-amber-400 hover:bg-amber-400/10"
+        >
+          Abdelrahman
+        </button>
+        <button
+          type="button"
+          data-user="ahmedyassin213"
+          class="chip cursor-pointer rounded-full border border-neutral-700 px-4 py-1.5 text-sm text-amber-400 transition hover:border-amber-400 hover:bg-amber-400/10"
+        >
+          ahmedyassin
+        </button>
+        <button
+          type="button"
+          data-user="mark303775"
+          class="chip cursor-pointer rounded-full border border-neutral-700 px-4 py-1.5 text-sm text-amber-400 transition hover:border-amber-400 hover:bg-amber-400/10"
+        >
+          mark
+        </button>
+        <button
+          type="button"
+          data-user="ranimmohemd06-droid"
+          class="chip cursor-pointer rounded-full border border-neutral-700 px-4 py-1.5 text-sm text-amber-400 transition hover:border-amber-400 hover:bg-amber-400/10"
+        >
+          ranim
+        </button>
+        <button
+          type="button"
+          data-user="karimkmsa"
+          class="chip cursor-pointer rounded-full border border-neutral-700 px-4 py-1.5 text-sm text-amber-400 transition hover:border-amber-400 hover:bg-amber-400/10"
+        >
+          karimk
+        </button>
+        <button
+          type="button"
+          data-user="engy2003"
+          class="chip cursor-pointer rounded-full border border-neutral-700 px-4 py-1.5 text-sm text-amber-400 transition hover:border-amber-400 hover:bg-amber-400/10"
+        >
+          engy
+        </button>
+      </div>
+
+      <p id="status" class="min-h-6 text-center text-neutral-400"></p>
+
+      <section id="profile" class="hidden"></section>
+
+      <section id="repos-section" class="hidden">
+        <h2 class="mb-4 text-xl font-bold">
+          <i class="fa-solid fa-code-branch mr-2 text-amber-400"></i>Latest
+          repositories
+        </h2>
+        <ul
+          id="repos"
+          class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        ></ul>
+      </section>
+
+      <section
+        class="grid grid-cols-1 gap-4 border-t border-neutral-800 pt-8 sm:grid-cols-3"
+      >
+        <div
+          class="rounded-2xl border border-neutral-800 bg-neutral-800/50 p-5 transition hover:-translate-y-1 hover:border-amber-400/50"
+        >
+          <i class="fa-solid fa-bolt mb-3 text-xl text-amber-400"></i>
+          <h3 class="mb-1 font-bold">Instant results</h3>
+          <p class="text-sm text-neutral-400">
+            The profile and repositories load together in one go.
+          </p>
+        </div>
+        <div
+          class="rounded-2xl border border-neutral-800 bg-neutral-800/50 p-5 transition hover:-translate-y-1 hover:border-amber-400/50"
+        >
+          <i class="fa-solid fa-chart-simple mb-3 text-xl text-amber-400"></i>
+          <h3 class="mb-1 font-bold">Key numbers</h3>
+          <p class="text-sm text-neutral-400">
+            See repos, followers, and following at a glance.
+          </p>
+        </div>
+        <div
+          class="rounded-2xl border border-neutral-800 bg-neutral-800/50 p-5 transition hover:-translate-y-1 hover:border-amber-400/50"
+        >
+          <i class="fa-solid fa-star mb-3 text-xl text-amber-400"></i>
+          <h3 class="mb-1 font-bold">Top work</h3>
+          <p class="text-sm text-neutral-400">
+            Check stars and languages on the most recently updated repos.
+          </p>
+        </div>
+      </section>
+
+      <footer class="text-center text-sm text-neutral-500">
+        Data comes from the public GitHub API.
+      </footer>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
