@@ -28,7 +28,6 @@ searchForm.addEventListener("submit", async function (e) {
         reposList.innerHTML = "";
         showInvalidUserMessage();
         searchInput.value = "";
-        z;
       }
     }
   } catch (error) {
@@ -38,9 +37,15 @@ searchForm.addEventListener("submit", async function (e) {
 
 async function getProfile(userId) {
   const response = await fetch(`https://api.github.com/users/${userId}`);
+//   if (response.status === 403) {
+//     throw new Error(
+//       "GitHub API rate limit exceeded. Please wait and try again.",
+//     );
+//   }
   if (!response.ok) {
     return null;
   }
+
   const user = await response.json();
   return user;
 }
@@ -51,16 +56,7 @@ function showInvalidUserMessage() {
   const message = document.createElement("p");
   message.id = "invalid-user-message";
   message.className = "mt-2 text-center text-red-400";
-  message.textContent = "Please enter a valid GitHub user.";
-  suggestions.insertAdjacentElement("afterend", message);
-}
-function showInvalidUserMessage() {
-  const existingMessage = document.getElementById("invalid-user-message");
-  if (existingMessage) return;
-  const message = document.createElement("p");
-  message.id = "invalid-user-message";
-  message.className = "mt-2 text-center text-red-400";
-  message.textContent = "Please enter a valid GitHub user.";
+  message.textContent = "Error: Rate limit or Not existing account";
   suggestions.insertAdjacentElement("afterend", message);
 }
 
@@ -101,8 +97,8 @@ async function createReposSection(user) {
     let language = repo.language || "";
 
     reposList.innerHTML += `
-      <li class="flex flex-col gap-2 rounded-2xl border border-neutral-700 bg-neutral-800 p-4 transition hover:-translate-y-1 hover:border-amber-400">
-        <a href="${repo.html_url}" target="_blank" class="break-words font-bold text-amber-400 hover:underline">${repo.name}</a>
+    <li class="flex flex-col gap-2 rounded-2xl border border-neutral-700 bg-neutral-800 p-4 transition hover:-translate-y-1 hover:border-amber-400">
+    <a href="${repo.html_url}" target="_blank" class="break-words font-bold text-amber-400 hover:underline">${repo.name}</a>
         <p class="flex-1 text-sm text-neutral-400">${description}</p>
         <div class="flex items-center gap-4 text-sm text-neutral-400">
           <span><i class="fa-solid fa-star mr-1 text-amber-400"></i>${repo.stargazers_count}</span>
@@ -117,7 +113,23 @@ async function createReposSection(user) {
 suggestions.addEventListener("click", async function (e) {
   const selectedButton = e.target.closest(".chip");
 
+  if (!selectedButton) return;
+
   const user = await getProfile(selectedButton.dataset.user);
+
+  if (!user) {
+    profile.classList.add("hidden");
+    reposSection.classList.add("hidden");
+    profile.innerHTML = "";
+    reposList.innerHTML = "";
+    showInvalidUserMessage();
+    return;
+  }
+
+  const existingMessage = document.getElementById("invalid-user-message");
+  if (existingMessage) {
+    existingMessage.remove();
+  }
   createProfileSection(user);
   await createReposSection(user);
 });
